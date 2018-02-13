@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace GameEngine
 {
-    public class Player : Character
+    public class Player : FireCharacter
     {
         public Player()
         {
@@ -78,6 +78,11 @@ namespace GameEngine
                 {
                     Jump(map);
                 }
+            }
+
+            if(Input.KeyPressed(Keys.Space))
+            {
+                Fire();
             }
         }
     }

@@ -59,6 +59,7 @@ namespace GameEngine
             Input.Update();
 
             UpdateObjects();
+            map.Update(objects);
 
             //Update the things FNA handles for us underneath the hood:
             base.Update(gameTime);
@@ -86,9 +87,17 @@ namespace GameEngine
             //Add the player
             objects.Add(new Player(new Vector2(640, 360)));
 
+            //Add enemies
+            objects.Add(new Enemy(new Vector2(300, 522)));
+
             //Add the walls
             map.walls.Add(new Wall(new Rectangle(256, 256, 256, 256)));
             map.walls.Add(new Wall(new Rectangle(0, 650, 1280, 128)));
+
+            //Add decor
+            map.decor.Add(new Decor(Vector2.Zero, "background", 1f));
+
+            map.LoadMap(Content);
 
             LoadObjects();
         }
@@ -117,6 +126,10 @@ namespace GameEngine
                 objects[i].Draw(spriteBatch);
             }
 
+            for (int i = 0; i < map.decor.Count; i++)
+            {
+                map.decor[i].Draw(spriteBatch);
+            }
         }
     }
 }
