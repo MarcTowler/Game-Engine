@@ -18,6 +18,8 @@ namespace GameEngine
         public List<GameObject> objects = new List<GameObject>();
         public Map map = new Map();
 
+        GameHUD gameHUD = new GameHUD();
+
         public Game1() //This is the constructor, this function is called whenever the game class is created.
         {
             graphics = new GraphicsDeviceManager(this);
@@ -46,6 +48,7 @@ namespace GameEngine
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             map.Load(Content);
+            gameHUD.Load(Content);
             LoadLevel();
         }
 
@@ -77,6 +80,8 @@ namespace GameEngine
             DrawObjects();
             map.DrawWalls(spriteBatch);        
             spriteBatch.End();
+
+            gameHUD.Draw(spriteBatch);
 
             //Draw the things FNA handles for us underneath the hood:
             base.Draw(gameTime);
