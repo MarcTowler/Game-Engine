@@ -25,10 +25,10 @@ namespace GameEngine
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            graphics.PreferredBackBufferWidth = 1280;
-            graphics.PreferredBackBufferHeight = 720;
-            graphics.IsFullScreen = false;
-            graphics.ApplyChanges();
+            Resolution.Init(ref graphics);
+            Resolution.SetVirtualResolution(1280, 720);
+
+            Resolution.SetResolution(1280, 720, false);
         }
 
         /// <summary>
@@ -37,6 +37,7 @@ namespace GameEngine
         protected override void Initialize()
         {
             base.Initialize();
+            Camera.Initialize();
         }
 
         /// <summary>
@@ -63,6 +64,7 @@ namespace GameEngine
 
             UpdateObjects();
             map.Update(objects);
+            UpdateCamera();
 
             //Update the things FNA handles for us underneath the hood:
             base.Update(gameTime);
@@ -76,7 +78,9 @@ namespace GameEngine
             //This will clear what's on the screen each frame, if we don't clear the screen will look like a mess:
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            Resolution.BeginDraw();
+
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Camera.GetTransformMatrix());
             DrawObjects();
             map.DrawWalls(spriteBatch);        
             spriteBatch.End();
@@ -135,6 +139,16 @@ namespace GameEngine
             {
                 map.decor[i].Draw(spriteBatch);
             }
+        }
+
+        private void UpdateCamera()
+        {
+            if(objects.Count == 0)
+            {
+                return;
+            }
+
+            Camera.Update(objects[0].position);
         }
     }
 }
